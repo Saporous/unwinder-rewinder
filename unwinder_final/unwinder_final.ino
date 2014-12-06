@@ -12,7 +12,7 @@
 #define MAX_DISTANCE 200 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 
 int motor = 10; // Arduino pin tied to motor/MOS SIG pin on the ultrasonic sensor.
-int frequency = 1000; // A frequency for the PWM that works with the motor - needs tuning
+int frequency = 20000; // A frequency for the PWM that works with the motor - needs tuning
 
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 
