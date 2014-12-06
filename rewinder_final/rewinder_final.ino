@@ -52,16 +52,16 @@ void loop() {
     int temp = (Serial.read() - 48);
     switch(temp){
       case 0:
-        pwmWrite(feeder, 150);
+        pwmWrite(feeder, 0);
         break;
       case 1:
-        pwmWrite(feeder, 175);
-        break;
-      case 2:
         pwmWrite(feeder, 200);
         break;
+      case 2:
+        pwmWrite(feeder, 215);
+        break;
       case 3:
-        pwmWrite(feeder, 240);
+        pwmWrite(feeder, 230);
         break;
       case 4:
         pwmWrite(feeder, 255);
