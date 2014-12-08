@@ -2,7 +2,7 @@
  // Read data from the serial and turn ON or OFF a light depending on the value
  
  char val; // Data received from the serial port
- int ledPin = 4; // Set the pin to digital I/O 4
+ int ledPin = 13; // Set the pin to digital I/O 4
  
  void setup() {
  pinMode(ledPin, OUTPUT); // Set pin as OUTPUT
