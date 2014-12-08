@@ -6,6 +6,8 @@ Serial myPort;  // Create object from Serial class
 int val;        // Data received from the serial port
 int emergencyStop = 0;
 float feedSpeed = 0;
+String status = "Idle";
+int running = 0;
 
 ControlP5 cp5;
 Slider slider;
@@ -16,7 +18,7 @@ void setup()
   
   cp5 = new ControlP5(this);
   slider = new Slider(cp5, "Speed Control");
-  slider.setPosition(200, 250);
+  slider.setPosition(100, 250);
   slider.setWidth(250);
   slider.setHeight(25);
   slider.setRange(0, 100);
@@ -35,14 +37,29 @@ void draw() {
   background(30, 30, 30);
   
   title();
+  status();
+  console();
   speedControl();
   emergencyStopButton();
+}
+
+void status(){
+  fill(255);
+  textSize(24);
+  text("Status: " + status, 100, 175, 5);
+}
+
+void console(){
+  fill(255);
+  textSize(24);
+  text("Console", 100, 430, 5);
+  rect(100, 440, 600, 200);
 }
 
 void speedControl(){
   fill(255);
   textSize(24);
-  text("Feed Speed: " + slider.getValue() + "%", 200, 240, 5); 
+  text("Feed Speed: " + slider.getValue() + "%", 100, 240, 5); 
 }
 
 void title(){
@@ -52,28 +69,51 @@ void title(){
 }
 
 void emergencyStop(){
+  running = 0;
   slider.setValue(0);
    println("STOP!!!"); 
 }
 
 void emergencyStopButton(){
-  if(mousePressed && mouseX >= 800 && mouseX <= 1000 && mouseY >= 440 && mouseY < 640){
-    fill(100, 0, 0);
-    emergencyStop = 1;
+  if(running == 0){
+     fill(0, 255, 0);
+     rect(800, 440, 200, 200);
+      
+     fill(255);
+     textSize(24);
+     text("Start", 875, 545, 5);
   }
-  else{   
-    fill(255, 0, 0);
+  else{
+    if(mousePressed && mouseX >= 800 && mouseX <= 1000 && mouseY >= 440 && mouseY < 640){
+      fill(100, 0, 0);
+      rect(800, 440, 200, 200);
+      emergencyStop = 1;
+      
+      fill(255);
+      textSize(24);
+      text("Emergency Stop", 807, 545, 5);
+    }
+    else{   
+      fill(255, 0, 0);
+      rect(800, 440, 200, 200);
+      
+      fill(255);
+      textSize(24);
+      text("Emergency Stop", 807, 545, 5);
+    }
   }
+}
+
+void start(){
   
-  rect(800, 440, 200, 200);
-  
-  fill(255);
-  textSize(24);
-  text("Emergency Stop", 807, 545, 5);
 }
 
 void mouseReleased(){
-  if(emergencyStop == 1 && mouseX >= 800 && mouseX <= 1000 && mouseY >= 440 && mouseY < 640){
+  if(running == 0 && mouseX >= 800 && mouseX <= 1000 && mouseY >= 440 && mouseY < 640){
+    running = 1;
+    slider.setValue(25.0);
+  }
+  else if(running == 1 && emergencyStop == 1 && mouseX >= 800 && mouseX <= 1000 && mouseY >= 440 && mouseY < 640){
      emergencyStop(); 
   }
   else{
