@@ -19,7 +19,7 @@ NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and
 void setup() {
   Serial.begin(115200); // Open serial monitor at 115200 baud to see ping results.
   InitTimersSafe(); 
-  /*  
+  
    //sets the frequency for the specified pin
    bool success = SetPinFrequencySafe(motor, frequency);
    
@@ -28,7 +28,7 @@ void setup() {
    pinMode(motor, OUTPUT);
    digitalWrite(motor, LOW);    
    } 
-   */
+   
   bool success2 = SetPinFrequencySafe(feeder, frequency); 
   if(success2) {  
     pinMode(feeder, OUTPUT);

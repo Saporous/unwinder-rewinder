@@ -55,13 +55,15 @@ void loop() {
   }
   // Values need to be tweaked - dependent on frequency of PWM
   else if(distance >= 300 && distance < 400)
-    pwmWrite(motor, 235);
+    pwmWrite(motor, 200);
   else if(distance >= 400 && distance < 500)
-    pwmWrite(motor, 240);
-  else if(distance >= 500 && distance < 700)
+    pwmWrite(motor, 230);
+  else if(distance >= 500 && distance < 600)
     pwmWrite(motor, 245);
-  else if(distance >= 700 && distance < 1000)
+  else if(distance >= 600 && distance < 700)
     pwmWrite(motor, 255);
+  else if(distance >= 700 && distance < 1000)
+    pwmWrite(motor, 0);
   else 
     pwmWrite(motor, 0);
 }
