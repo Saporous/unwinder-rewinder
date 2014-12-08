@@ -32,13 +32,13 @@ void setup() {
   bool success2 = SetPinFrequencySafe(feeder, frequency); 
   if(success2) {  
     pinMode(feeder, OUTPUT);
-    digitalWrite(feeder, HIGH);
+    digitalWrite(feeder, LOW);
   }
 }
 
 void loop() {
   // Wait 5ms between pings (about 200 pings/sec).
-  delay(50);
+  delay(10);
   // Send ping, get ping time in microseconds (uS).
   unsigned int distance = sonar.ping(); 
 
@@ -55,13 +55,13 @@ void loop() {
         pwmWrite(feeder, 0);
         break;
       case 1:
-        pwmWrite(feeder, 200);
+        pwmWrite(feeder, 220);
         break;
       case 2:
-        pwmWrite(feeder, 215);
+        pwmWrite(feeder, 235);
         break;
       case 3:
-        pwmWrite(feeder, 230);
+        pwmWrite(feeder, 245);
         break;
       case 4:
         pwmWrite(feeder, 255);
@@ -79,17 +79,19 @@ void loop() {
    }
    // Values need to be tweaked - dependent on frequency of PWM
    else if(distance >= 150 && distance < 250)
-   pwmWrite(motor, 150);
+   pwmWrite(motor, 90);
    else if(distance >= 250 && distance < 350)
-   pwmWrite(motor, 175);
+   pwmWrite(motor, 85);
    else if(distance >= 350 && distance < 500)
-   pwmWrite(motor, 200);
-   else if(distance >= 500 && distance < 700)
-   pwmWrite(motor, 240);
-   else if(distance >= 700 && distance < 1000)
-   pwmWrite(motor, 255);
+   pwmWrite(motor, 75);
+   else if(distance >= 500 && distance < 650)
+   pwmWrite(motor, 70);
+   else if(distance >= 650 && distance < 800)
+   pwmWrite(motor, 65);
+   else if(distance >= 800 && distance < 1000)
+   pwmWrite(motor, 0);
    else 
-   pwmWrite(motor, 255);
+   pwmWrite(motor, 0);
 }
 
 

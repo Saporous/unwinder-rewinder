@@ -50,21 +50,19 @@ void loop() {
 
   // US_ROUNDTRIP_CM = 57 in config
   // Approximation to shut off motor once within about 5 cm
-  if(distance < 150){ 
+  if(distance < 300){ 
     pwmWrite(motor, 0);
   }
   // Values need to be tweaked - dependent on frequency of PWM
-  else if(distance >= 150 && distance < 250)
-    pwmWrite(motor, 150);
-  else if(distance >= 250 && distance < 350)
-    pwmWrite(motor, 175);
-  else if(distance >= 350 && distance < 500)
-    pwmWrite(motor, 200);
-  else if(distance >= 500 && distance < 700)
+  else if(distance >= 300 && distance < 400)
+    pwmWrite(motor, 235);
+  else if(distance >= 400 && distance < 500)
     pwmWrite(motor, 240);
+  else if(distance >= 500 && distance < 700)
+    pwmWrite(motor, 245);
   else if(distance >= 700 && distance < 1000)
     pwmWrite(motor, 255);
   else 
-    pwmWrite(motor, 255);
+    pwmWrite(motor, 0);
 }
 
