@@ -71,7 +71,8 @@ void title(){
 void emergencyStop(){
   running = 0;
   slider.setValue(0);
-   println("STOP!!!"); 
+   println("STOP!!!");
+   status = "Idle";
 }
 
 void emergencyStopButton(){
@@ -112,9 +113,10 @@ void mouseReleased(){
   if(running == 0 && mouseX >= 800 && mouseX <= 1000 && mouseY >= 440 && mouseY < 640){
     running = 1;
     slider.setValue(25.0);
+    status = "Running";
   }
   else if(running == 1 && emergencyStop == 1 && mouseX >= 800 && mouseX <= 1000 && mouseY >= 440 && mouseY < 640){
-     emergencyStop(); 
+     emergencyStop();
   }
   else{
     emergencyStop = 0;
