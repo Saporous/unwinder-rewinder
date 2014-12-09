@@ -19,16 +19,16 @@ NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and
 void setup() {
   Serial.begin(115200); // Open serial monitor at 115200 baud to see ping results.
   InitTimersSafe(); 
-  
-   //sets the frequency for the specified pin
-   bool success = SetPinFrequencySafe(motor, frequency);
-   
-   //if the pin frequency was set successfully, turn pin 10 on
-   if(success) {
-   pinMode(motor, OUTPUT);
-   digitalWrite(motor, LOW);    
-   } 
-   
+
+  //sets the frequency for the specified pin
+  bool success = SetPinFrequencySafe(motor, frequency);
+
+  //if the pin frequency was set successfully, turn pin 10 on
+  if(success) {
+    pinMode(motor, OUTPUT);
+    digitalWrite(motor, LOW);    
+  } 
+
   bool success2 = SetPinFrequencySafe(feeder, frequency); 
   if(success2) {  
     pinMode(feeder, OUTPUT);
@@ -51,47 +51,49 @@ void loop() {
   if(Serial.available()){
     int temp = (Serial.read() - 48);
     switch(temp){
-      case 0:
-        pwmWrite(feeder, 0);
-        break;
-      case 1:
-        pwmWrite(feeder, 220);
-        break;
-      case 2:
-        pwmWrite(feeder, 235);
-        break;
-      case 3:
-        pwmWrite(feeder, 245);
-        break;
-      case 4:
-        pwmWrite(feeder, 255);
-        break;
-      default:
-        pwmWrite(feeder, 0);  
-        break;
+    case 0:
+      pwmWrite(feeder, 0);
+      break;
+    case 1:
+      pwmWrite(feeder, 220);
+      break;
+    case 2:
+      pwmWrite(feeder, 235);
+      break;
+    case 3:
+      pwmWrite(feeder, 245);
+      break;
+    case 4:
+      pwmWrite(feeder, 255);
+      break;
+    default:
+      pwmWrite(feeder, 0);  
+      break;
     }
     Serial.println(temp);
   }
   // US_ROUNDTRIP_CM = 57 in config
   // Approximation to shut off motor once within about 5 cm
-   if(distance < 150){ 
-   pwmWrite(motor, 0);
-   }
-   // Values need to be tweaked - dependent on frequency of PWM
-   else if(distance >= 150 && distance < 250)
-   pwmWrite(motor, 90);
-   else if(distance >= 250 && distance < 350)
-   pwmWrite(motor, 85);
-   else if(distance >= 350 && distance < 500)
-   pwmWrite(motor, 75);
-   else if(distance >= 500 && distance < 650)
-   pwmWrite(motor, 70);
-   else if(distance >= 650 && distance < 800)
-   pwmWrite(motor, 65);
-   else if(distance >= 800 && distance < 1000)
-   pwmWrite(motor, 0);
-   else 
-   pwmWrite(motor, 0);
+  if(distance < 150){ 
+    pwmWrite(motor, 0);
+    Serial.write('B');
+  }
+  // Values need to be tweaked - dependent on frequency of PWM
+  else if(distance >= 150 && distance < 250)
+    pwmWrite(motor, 90);
+  else if(distance >= 250 && distance < 350)
+    pwmWrite(motor, 85);
+  else if(distance >= 350 && distance < 500)
+    pwmWrite(motor, 75);
+  else if(distance >= 500 && distance < 650)
+    pwmWrite(motor, 70);
+  else if(distance >= 650 && distance < 800)
+    pwmWrite(motor, 65);
+  else if(distance >= 800 && distance < 1000)
+    pwmWrite(motor, 0);
+  else 
+    pwmWrite(motor, 0);
 }
+
 
 
