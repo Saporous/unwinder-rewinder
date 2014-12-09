@@ -52,9 +52,6 @@ void draw() {
   if (myPort.available() > 0 && running == 1) {
     if (myPort.read() == 'B') {
       emergencyStop();
-      myPort.clear();
-      myPort.stop();
-      myPort = new Serial(this, portName, 115200); 
       running = 0;
 
       println("myPort1 Triggered STOP");
@@ -63,9 +60,6 @@ void draw() {
   if (myPort2.available() > 0 && running == 1) {
     if (myPort2.read() == 'B') {
       emergencyStop();
-      myPort2.clear();
-      myPort2.stop();
-      myPort2 = new Serial(this, portName2, 115200); 
       running = 0;
 
       println("myPort2 Triggered STOP");
@@ -82,7 +76,7 @@ void draw() {
       break;
     case 25:
       myPort.write('1');
-      
+
       println("ASDFSAFD");
       break;
     case 50:
