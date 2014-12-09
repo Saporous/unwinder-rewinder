@@ -13,6 +13,7 @@
 
 int motor = 10; // Arduino pin tied to motor/MOS SIG pin on the ultrasonic sensor.
 int frequency = 20000; // A frequency for the PWM that works with the motor - needs tuning
+int running = 0;
 
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 
@@ -38,7 +39,7 @@ void setup() {
 
 void loop() {
   // Wait 5ms between pings (about 200 pings/sec).
-  delay(50);
+  delay(10);
   // Send ping, get ping time in microseconds (uS).
   unsigned int distance = sonar.ping(); 
 
@@ -48,27 +49,33 @@ void loop() {
   //Serial.print(distance);// / US_ROUNDTRIP_CM); 
   //Serial.println("cm");
 
-  // US_ROUNDTRIP_CM = 57 in config
-  // Approximation to shut off motor once within about 5 cm
-  if(distance < 300){ 
-    pwmWrite(motor, 0);
+  if(Serial.available()){
+    int temp = Serial.read();
+    if(temp == '0')
+      running = 0;
+    else if(temp == '1')
+      running = 1; 
   }
-  // Values need to be tweaked - dependent on frequency of PWM
-  else if(distance >= 300 && distance < 400)
-    pwmWrite(motor, 180);
-  else if(distance >= 400 && distance < 500)
-    pwmWrite(motor, 200);
-  else if(distance >= 500 && distance < 600)
-    pwmWrite(motor, 230);
-  else if(distance >= 600 && distance < 700)
-    pwmWrite(motor, 255);
-  else if(distance >= 700 && distance < 1000){
-    pwmWrite(motor, 0);
-    Serial.write('B');
-  }
-  else{
-    pwmWrite(motor, 0);
-    Serial.write('B');
+
+  if(running == 1){
+    if(distance < 300){ 
+      pwmWrite(motor, 0);
+    }
+    // Values need to be tweaked - dependent on frequency of PWM
+    else if(distance >= 300 && distance < 400)
+      pwmWrite(motor, 180);
+    else if(distance >= 400 && distance < 500)
+      pwmWrite(motor, 200);
+    else if(distance >= 500 && distance < 600)
+      pwmWrite(motor, 230);
+    else if(distance >= 600 && distance < 700)
+      pwmWrite(motor, 255);
+    else if(distance >= 700){
+      pwmWrite(motor, 0);
+      running = 0;
+      Serial.write('B');
+    }
   }
 }
+
 

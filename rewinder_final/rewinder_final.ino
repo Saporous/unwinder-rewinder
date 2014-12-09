@@ -9,7 +9,7 @@
 int motor = 9; // Arduino pin tied to motor/MOS SIG pin on the ultrasonic sensor.
 int feeder = 10;
 int frequency = 20000; // A frequency for the PWM that works with the motor - needs tuning
-
+int running = 0;
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 
 /*===============================================
@@ -53,47 +53,56 @@ void loop() {
     switch(temp){
     case 0:
       pwmWrite(feeder, 0);
+      running = 0;
       break;
     case 1:
       pwmWrite(feeder, 220);
+      running = 1;
       break;
     case 2:
       pwmWrite(feeder, 235);
+      running = 1;
       break;
     case 3:
       pwmWrite(feeder, 245);
+      running = 1;
       break;
     case 4:
       pwmWrite(feeder, 255);
+      running = 1;
       break;
     default:
       pwmWrite(feeder, 0);  
+      running = 0;
       break;
     }
-    Serial.println(temp);
   }
+  
   // US_ROUNDTRIP_CM = 57 in config
   // Approximation to shut off motor once within about 5 cm
-  if(distance < 150){ 
-    pwmWrite(motor, 0);
-    Serial.write('B');
+  if(running == 1){
+    if(distance < 150){ 
+      pwmWrite(motor, 0);
+      running = 0;
+      Serial.write('B');
+    }
+    // Values need to be tweaked
+    else if(distance >= 150 && distance < 250)
+      pwmWrite(motor, 90);
+    else if(distance >= 250 && distance < 350)
+      pwmWrite(motor, 85);
+    else if(distance >= 350 && distance < 500)
+      pwmWrite(motor, 75);
+    else if(distance >= 500 && distance < 650)
+      pwmWrite(motor, 70);
+    else if(distance >= 650 && distance < 800)
+      pwmWrite(motor, 65);
+    else if(distance >= 800)
+      pwmWrite(motor, 0);
   }
-  // Values need to be tweaked - dependent on frequency of PWM
-  else if(distance >= 150 && distance < 250)
-    pwmWrite(motor, 90);
-  else if(distance >= 250 && distance < 350)
-    pwmWrite(motor, 85);
-  else if(distance >= 350 && distance < 500)
-    pwmWrite(motor, 75);
-  else if(distance >= 500 && distance < 650)
-    pwmWrite(motor, 70);
-  else if(distance >= 650 && distance < 800)
-    pwmWrite(motor, 65);
-  else if(distance >= 800 && distance < 1000)
-    pwmWrite(motor, 0);
-  else 
-    pwmWrite(motor, 0);
 }
+
+
 
 
 
