@@ -3,6 +3,7 @@ import controlP5.*;
 
 
 Serial myPort;  // Create object from Serial class
+Serial myPort2;
 int val;        // Data received from the serial port
 int emergencyStop = 0;
 int feedSpeed = 0;
@@ -30,9 +31,13 @@ void setup()
   // is always my  FTDI adaptor, so I open Serial.list()[0].
   // On Windows machines, this generally opens COM1.
   // Open whatever port is the one you're using.
-  String portName = Serial.list()[2];
-  println(Serial.list()[3]);
+  String portName = Serial.list()[1];
+  println(Serial.list()[1]);
   myPort = new Serial(this, portName, 115200);
+  
+  portName = Serial.list()[0];
+  println(Serial.list()[0]);
+  myPort2 = new Serial(this, portName, 115200);
 }
 
 void draw() {
