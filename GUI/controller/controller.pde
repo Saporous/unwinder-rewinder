@@ -49,6 +49,15 @@ void draw() {
   speedControl();
   emergencyStopButton();
   
+  if(myPort.available() > 0){
+    if(myPort.read() == 'B')
+      emergencyStop();    
+  }
+  if(myPort2.available() > 0){
+    if(myPort2.read() == 'B')
+      emergencyStop();
+  }
+  
   if(feedSpeed != slider.getValue()){
      feedSpeed = (int) slider.getValue();
      println(feedSpeed);
