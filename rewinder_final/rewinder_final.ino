@@ -43,10 +43,10 @@ void loop() {
   unsigned int distance = sonar.ping(); 
 
   // Print output, can be viewed with Serial Monitor (default Ctrl + Shift + M to open it)
-  Serial.print("Ping: ");
+  //Serial.print("Ping: ");
   // Convert ping time to distance in cm and print result (0 = outside set distance range)
-  Serial.print(distance);// / US_ROUNDTRIP_CM); 
-  Serial.println("cm");
+  //Serial.print(distance);// / US_ROUNDTRIP_CM); 
+  //Serial.println("cm");
 
   if(Serial.available()){
     int temp = (Serial.read() - 48);

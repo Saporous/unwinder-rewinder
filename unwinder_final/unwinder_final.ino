@@ -43,10 +43,10 @@ void loop() {
   unsigned int distance = sonar.ping(); 
 
   // Print output, can be viewed with Serial Monitor (default Ctrl + Shift + M to open it)
-  Serial.print("Ping: ");
+  //Serial.print("Ping: ");
   // Convert ping time to distance in cm and print result (0 = outside set distance range)
-  Serial.print(distance);// / US_ROUNDTRIP_CM); 
-  Serial.println("cm");
+  //Serial.print(distance);// / US_ROUNDTRIP_CM); 
+  //Serial.println("cm");
 
   // US_ROUNDTRIP_CM = 57 in config
   // Approximation to shut off motor once within about 5 cm
@@ -62,9 +62,13 @@ void loop() {
     pwmWrite(motor, 230);
   else if(distance >= 600 && distance < 700)
     pwmWrite(motor, 255);
-  else if(distance >= 700 && distance < 1000)
+  else if(distance >= 700 && distance < 1000){
     pwmWrite(motor, 0);
-  else 
+    Serial.write('B');
+  }
+  else{
     pwmWrite(motor, 0);
+    Serial.write('B');
+  }
 }
 
