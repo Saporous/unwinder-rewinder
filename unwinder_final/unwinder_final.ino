@@ -33,7 +33,7 @@ void setup() {
   //if the pin frequency was set successfully, turn pin 10 on
   if(success) {
     pinMode(motor, OUTPUT);
-    digitalWrite(motor, HIGH);    
+    digitalWrite(motor, LOW);    
   }
 }
 
