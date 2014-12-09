@@ -10,14 +10,14 @@ int feedSpeed = 0;
 String status = "Idle";
 int running = 0;
 char portVal;
-
+String portName, portName2;
 ControlP5 cp5;
 Slider slider;
 
 void setup() 
 {
   size(1080, 720);
-  
+
   cp5 = new ControlP5(this);
   slider = new Slider(cp5, "Speed Control");
   slider.setPosition(100, 250);
@@ -26,125 +26,136 @@ void setup()
   slider.setRange(0, 100);
   slider.setNumberOfTickMarks(5);
   slider.setSliderMode(Slider.FLEXIBLE);
-  
+
   // I know that the first port in the serial list on my mac
   // is always my  FTDI adaptor, so I open Serial.list()[0].
   // On Windows machines, this generally opens COM1.
   // Open whatever port is the one you're using.
-  String portName = Serial.list()[1];
+  portName = Serial.list()[1];
   println(Serial.list()[1]);
   myPort = new Serial(this, portName, 115200);
-  
-  portName = Serial.list()[0];
+
+  portName2 = Serial.list()[0];
   println(Serial.list()[0]);
-  myPort2 = new Serial(this, portName, 115200);
+  myPort2 = new Serial(this, portName2, 115200);
 }
 
 void draw() {
   background(30, 30, 30);
-  
+
   title();
   status();
   console();
   speedControl();
   emergencyStopButton();
-  
-  if(myPort.available() > 0 && running == 1){
-    if(myPort.read() == 'B')
+
+  if (myPort.available() > 0 && running == 1) {
+    if (myPort.read() == 'B') {
       emergencyStop();
-      println("myPort1 Triggered STOP");    
+      myPort.clear();
+      myPort.stop();
+      myPort = new Serial(this, portName, 115200); 
+      running = 0;
+
+      println("myPort1 Triggered STOP");
+    }
   }
-  if(myPort2.available() > 0 && running == 1){
-    if(myPort2.read() == 'B')
+  if (myPort2.available() > 0 && running == 1) {
+    if (myPort2.read() == 'B') {
       emergencyStop();
+      myPort2.clear();
+      myPort2.stop();
+      myPort2 = new Serial(this, portName2, 115200); 
+      running = 0;
+
       println("myPort2 Triggered STOP");
+    }
   }
-  
-  if(feedSpeed != slider.getValue()){
-     feedSpeed = (int) slider.getValue();
-     println(feedSpeed);
-     println(feedSpeed);
-     switch(feedSpeed){
-       case 0:
-         myPort.write('0');
-         break;
-       case 25:
-         myPort.write('1');
-         
-         println("ASDFSAFD");
-         break;
-       case 50:
-         myPort.write('2');
-         break;
-       case 75:
-         myPort.write('3');
-         break;
-       case 100:
-         myPort.write('4');
-         break;
-       default:
-         myPort.write('0');
-         break;
-     } 
+
+  if (feedSpeed != slider.getValue()) {
+    feedSpeed = (int) slider.getValue();
+    println(feedSpeed);
+    println(feedSpeed);
+    switch(feedSpeed) {
+    case 0:
+      myPort.write('0');
+      break;
+    case 25:
+      myPort.write('1');
+      
+      println("ASDFSAFD");
+      break;
+    case 50:
+      myPort.write('2');
+      break;
+    case 75:
+      myPort.write('3');
+      break;
+    case 100:
+      myPort.write('4');
+      break;
+    default:
+      myPort.write('0');
+      break;
+    }
   }
 }
 
-void status(){
+void status() {
   fill(255);
   textSize(24);
   text("Status: " + status, 100, 175, 5);
 }
 
-void console(){
+void console() {
   fill(255);
   textSize(24);
   text("Console", 100, 430, 5);
   rect(100, 440, 600, 200);
 }
 
-void speedControl(){
+void speedControl() {
   fill(255);
   textSize(24);
-  text("Feed Speed: " + slider.getValue() + "%", 100, 240, 5); 
+  text("Feed Speed: " + slider.getValue() + "%", 100, 240, 5);
 }
 
-void title(){
+void title() {
   fill(255);
   textSize(48);
   text("Unwinder-Rewinder Controller", 180, 100, 5);
 }
 
-void emergencyStop(){
+void emergencyStop() {
   running = 0;
   slider.setValue(0);
-   println("STOP!!!");
-   status = "Idle";
-   myPort.write('L');
+  println("STOP!!!");
+  status = "ERROR!";
+  myPort.write('0');
+  myPort2.write('0');
 }
 
-void emergencyStopButton(){
-  if(running == 0){
-     fill(0, 255, 0);
-     rect(800, 440, 200, 200);
-      
-     fill(255);
-     textSize(24);
-     text("Start", 875, 545, 5);
-  }
-  else{
-    if(mousePressed && mouseX >= 800 && mouseX <= 1000 && mouseY >= 440 && mouseY < 640){
+void emergencyStopButton() {
+  if (running == 0) {
+    fill(0, 255, 0);
+    rect(800, 440, 200, 200);
+
+    fill(255);
+    textSize(24);
+    text("Start", 875, 545, 5);
+  } else {
+    if (mousePressed && mouseX >= 800 && mouseX <= 1000 && mouseY >= 440 && mouseY < 640) {
       fill(100, 0, 0);
       rect(800, 440, 200, 200);
       emergencyStop = 1;
-      
+
       fill(255);
       textSize(24);
       text("Emergency Stop", 807, 545, 5);
-    }
-    else{   
+    } else {   
       fill(255, 0, 0);
       rect(800, 440, 200, 200);
-      
+
       fill(255);
       textSize(24);
       text("Emergency Stop", 807, 545, 5);
@@ -152,21 +163,19 @@ void emergencyStopButton(){
   }
 }
 
-void start(){
-  
+void start() {
 }
 
-void mouseReleased(){
-  if(running == 0 && mouseX >= 800 && mouseX <= 1000 && mouseY >= 440 && mouseY < 640){
+void mouseReleased() {
+  if (running == 0 && mouseX >= 800 && mouseX <= 1000 && mouseY >= 440 && mouseY < 640) {
     running = 1;
     slider.setValue(25.0);
     status = "Running";
-    myPort.write('H');
-  }
-  else if(running == 1 && emergencyStop == 1 && mouseX >= 800 && mouseX <= 1000 && mouseY >= 440 && mouseY < 640){
-     emergencyStop();
-  }
-  else{
+    myPort.write('1');
+    myPort2.write('1');
+  } else if (running == 1 && emergencyStop == 1 && mouseX >= 800 && mouseX <= 1000 && mouseY >= 440 && mouseY < 640) {
+    emergencyStop();
+  } else {
     emergencyStop = 0;
   }
 }
