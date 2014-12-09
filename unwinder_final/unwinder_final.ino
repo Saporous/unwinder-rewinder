@@ -62,11 +62,7 @@ void loop() {
     pwmWrite(motor, 230);
   else if(distance >= 600 && distance < 700)
     pwmWrite(motor, 255);
-  else if(distance >= 700 && distance < 1000){
-    pwmWrite(motor, 0);
-    Serial.write('B');
-  }
-  else{
+  else if(distance >= 700){
     pwmWrite(motor, 0);
     Serial.write('B');
   }
