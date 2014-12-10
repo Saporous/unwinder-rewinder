@@ -77,7 +77,7 @@ void loop() {
       break;
     }
   }
-  
+
   // US_ROUNDTRIP_CM = 57 in config
   // Approximation to shut off motor once within about 5 cm
   if(running == 1){
@@ -100,7 +100,11 @@ void loop() {
     else if(distance >= 800)
       pwmWrite(motor, 0);
   }
+  else{
+    pwmWrite(motor, 0);
+  }
 }
+
 
 
 

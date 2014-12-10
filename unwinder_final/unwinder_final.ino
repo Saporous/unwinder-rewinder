@@ -76,6 +76,10 @@ void loop() {
       Serial.write('B');
     }
   }
+  else{
+    pwmWrite(motor, 0);   
+  }
 }
+
 
 
