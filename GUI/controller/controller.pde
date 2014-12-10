@@ -8,8 +8,10 @@ int val;        // Data received from the serial port
 int emergencyStop = 0;
 int feedSpeed = 0;
 String status = "Idle";
+int speedLock = 0;
 int running = 0;
 char portVal;
+String consoleText = "";
 String portName, portName2;
 ControlP5 cp5;
 Slider slider;
@@ -53,6 +55,9 @@ void draw() {
     if (myPort.read() == 'B') {
       emergencyStop();
       running = 0;
+      speedLock = 1;
+      status = "ERROR!";
+      consoleText = "Jam on Port 1";
 
       println("myPort1 Triggered STOP");
     }
@@ -61,18 +66,22 @@ void draw() {
     if (myPort2.read() == 'B') {
       emergencyStop();
       running = 0;
+      speedLock = 1;
+      status = "ERROR!";
+      consoleText = "Jam on Port 2";
 
       println("myPort2 Triggered STOP");
     }
   }
 
-  if (feedSpeed != slider.getValue()) {
+  if (speedLock == 0 && feedSpeed != slider.getValue()) {
     feedSpeed = (int) slider.getValue();
     println(feedSpeed);
     println(feedSpeed);
     switch(feedSpeed) {
     case 0:
       myPort.write('0');
+      emergencyStop();
       break;
     case 25:
       myPort.write('1');
@@ -106,6 +115,9 @@ void console() {
   textSize(24);
   text("Console", 100, 430, 5);
   rect(100, 440, 600, 200);
+  fill(0);
+  textSize(32);
+  text(consoleText, 100, 470); 
 }
 
 void speedControl() {
@@ -124,7 +136,7 @@ void emergencyStop() {
   running = 0;
   slider.setValue(0);
   println("STOP!!!");
-  status = "ERROR!";
+  status = "Idle";
   myPort.write('0');
   myPort2.write('0');
 }
@@ -162,11 +174,13 @@ void start() {
 
 void mouseReleased() {
   if (running == 0 && mouseX >= 800 && mouseX <= 1000 && mouseY >= 440 && mouseY < 640) {
+    speedLock = 0;
     running = 1;
     slider.setValue(25.0);
     status = "Running";
     myPort.write('1');
     myPort2.write('1');
+    consoleText = "";
   } else if (running == 1 && emergencyStop == 1 && mouseX >= 800 && mouseX <= 1000 && mouseY >= 440 && mouseY < 640) {
     emergencyStop();
   } else {
