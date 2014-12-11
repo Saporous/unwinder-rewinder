@@ -1,19 +1,17 @@
-//#include <ATimerDefs.h>
-//#include <BTimerDefs.h>
+// PWM library to activate Timer 1 and Timer 3
 #include <PWM.h>
 
 // NewPing library is for the ultrasonic sensor
 #include <NewPing.h>
 // PWM library gives functions to enable the internal timers
 
-
 #define TRIGGER_PIN  12  // Arduino pin tied to trigger pin on the ultrasonic sensor.
 #define ECHO_PIN     11  // Arduino pin tied to echo pin on the ultrasonic sensor.
 #define MAX_DISTANCE 200 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 
-int motor = 10; // Arduino pin tied to motor/MOS SIG pin on the ultrasonic sensor.
-int frequency = 20000; // A frequency for the PWM that works with the motor - needs tuning
-int running = 0;
+int motor = 10;          // Arduino pin tied to motor connected to amplifier module
+int frequency = 20000;   // A frequency for the PWM that works with the motor - values greater than 16000 cannot be heard
+int running = 0;         // a flag set by the GUI to control whether the motors run based upon dancer arm position
 
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 
@@ -57,6 +55,7 @@ void loop() {
       running = 1; 
   }
 
+  // assign different speeds to the internal PWM to control the DC motor connected to the Amplifier module
   if(running == 1){
     if(distance < 300){ 
       pwmWrite(motor, 0);
@@ -76,10 +75,12 @@ void loop() {
       Serial.write('B');
     }
   }
+  // do not run motor if GUI signals an error condition
   else{
     pwmWrite(motor, 0);   
   }
 }
+
 
 
 
